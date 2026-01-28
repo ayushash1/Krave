@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookies from "../utils/token.js";
 
+// Signup controller
 export const signUp = async (req, res) => {
   try {
     const { username, email, password, mobile, role } = req.body;
@@ -46,7 +47,6 @@ export const signUp = async (req, res) => {
     });
 
     return res.status(201).json(user);
-
   } catch (error) {
     return res
       .status(400)
@@ -54,3 +54,46 @@ export const signUp = async (req, res) => {
   }
 };
 
+// Signin controller
+export const signIn = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "User does not exist" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
+
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // generate token and set cookies
+    const token = generateTokenAndSetCookies(user._id);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === "production",
+      secure: false,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+    });
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: `Error in Signin: ${error.message}` });
+  }
+};
+
+// Signout controller
+export const signOut = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    return res.status(200).json({ message: "Signout successful" });
+  } catch (error) {
+    res.status(400).json({ message: `Error in Signout: ${error.message}` });
+  }
+};
