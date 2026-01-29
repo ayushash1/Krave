@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { GoEye, GoEyeClosed } from "react-icons/go";
+import { FcGoogle } from "react-icons/fc";
 
 const SignUp = () => {
   const bgcolor = "#F9F9F9";
@@ -8,7 +9,14 @@ const SignUp = () => {
   const textColor = "#2C3E50";
   const accentColor = "#FF6B6B";
   const lightBg = "#F0F8F5";
+
   const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [touched, setTouched] = useState(false);
+
+  const passwordsMatch = password === confirmPassword;
+  const showError = !passwordsMatch && touched;
 
   return (
     <div
@@ -27,16 +35,16 @@ const SignUp = () => {
         </h1>
         <p className="text-gray-500 mb-8 font-medium">Sign up to get started</p>
 
-        <div className="space-y-5">
+        <form className="space-y-4">
           {/* Full Name Input */}
           <div>
-            <label
+            {/* <label
               htmlFor="fullname"
               className="block font-semibold mb-2 text-sm"
               style={{ color: textColor }}
             >
-              Full Name
-            </label>
+              Name
+            </label> */}
             <input
               type="text"
               id="fullname"
@@ -51,18 +59,18 @@ const SignUp = () => {
                 (e.target.style.boxShadow = `0 0 0 3px rgba(85, 230, 193, 0.1)`)
               }
               onBlur={(e) => (e.target.style.boxShadow = "none")}
-              placeholder="Enter your full name"
+              placeholder="Name"
             />
           </div>
           {/* Email Input */}
           <div>
-            <label
+            {/* <label
               htmlFor="email"
               className="block font-semibold mb-2 text-sm"
               style={{ color: textColor }}
             >
               Email
-            </label>
+            </label> */}
             <input
               type="email"
               id="email"
@@ -77,49 +85,23 @@ const SignUp = () => {
                 (e.target.style.boxShadow = `0 0 0 3px rgba(85, 230, 193, 0.1)`)
               }
               onBlur={(e) => (e.target.style.boxShadow = "none")}
-              placeholder="Enter your email"
+              placeholder="Email Address"
             />
           </div>
-          {/* Phone Number Input */}
-          <div>
-            <label
-              htmlFor="number"
-              className="block font-semibold mb-2 text-sm"
-              style={{ color: textColor }}
-            >
-              Phone Number
-            </label>
-            <input
-              type="tel"
-              id="number"
-              className="w-full px-4 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2"
-              style={{
-                backgroundColor: lightBg,
-                borderColor: secondaryColor,
-                borderWidth: "1.5px",
-                color: textColor,
-              }}
-              onFocus={(e) =>
-                (e.target.style.boxShadow = `0 0 0 3px rgba(85, 230, 193, 0.1)`)
-              }
-              onBlur={(e) => (e.target.style.boxShadow = "none")}
-              placeholder="Enter your phone number"
-            />
-          </div>
-
           {/* Password Input */}
           <div>
-            <label
+            {/* <label
               htmlFor="password"
               className="block font-semibold mb-2 text-sm"
               style={{ color: textColor }}
             >
               Password
-            </label>
+            </label> */}
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
+                value={password}
                 className="w-full px-4 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2"
                 style={{
                   backgroundColor: lightBg,
@@ -127,6 +109,7 @@ const SignUp = () => {
                   borderWidth: "1.5px",
                   color: textColor,
                 }}
+                onChange={(e) => setPassword(e.target.value)}
                 onFocus={(e) =>
                   (e.target.style.boxShadow = `0 0 0 3px rgba(85, 230, 193, 0.1)`)
                 }
@@ -141,14 +124,65 @@ const SignUp = () => {
                 {!showPassword ? <GoEye /> : <GoEyeClosed />}
               </button>
             </div>
+          </div>
+          {/* Password Input */}
+          <div className="relative mt-4">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={confirmPassword}
+              onBlur={() => setTouched(true)}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm password"
+              className="w-full px-4 py-3 rounded-lg transition-all duration-200 focus:outline-none"
+              style={{
+                backgroundColor: lightBg,
+                border: "1.5px solid",
+                borderColor: showError
+                  ? accentColor
+                  : passwordsMatch
+                    ? primaryColor
+                    : secondaryColor,
+                color: textColor,
+              }}
+            />
+
             <button
               type="button"
-              className="w-full mt-10 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+              onClick={() => setShowPassword(!showPassword)}
             >
-              Register
+              {!showPassword ? <GoEye /> : <GoEyeClosed />}
             </button>
           </div>
-        </div>
+          {/* Register Button */}
+          <button
+            type="button"
+            className="w-full mt-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50"
+          >
+            Register
+          </button>{" "}
+          <div className="relative flex py-2 items-center">
+            <div className="flex-grow border-t border-gray-200"></div>{" "}
+            <span className="flex-shrink mx-4 text-gray-400 text-sm">OR</span>
+            <div className="flex-grow border-t border-gray-200"></div>{" "}
+          </div>
+          {/* Signup with google button */}
+          <button
+            type="button"
+            className="w-full mt-1 border-2 border-teal-500 text-gray-700 font-semibold py-3 px-4 rounded-lg hover:bg-teal-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 flex items-center justify-center"
+          >
+            <FcGoogle className="inline mr-2 text-2xl bg-white rounded-full" />
+            Sign up with Google
+          </button>
+          <button>
+            <p className="text-sm mt-4 text-center text-gray-600">
+              Already have an account?{" "}
+              <span className="text-teal-500 font-semibold hover:underline cursor-pointer">
+                Log In
+              </span>
+            </p>
+          </button>
+        </form>
       </div>
     </div>
   );
