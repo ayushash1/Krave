@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import { FcGoogle } from "react-icons/fc";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const SignUp = () => {
   const bgcolor = "#F9F9F9";
@@ -17,6 +19,26 @@ const SignUp = () => {
 
   const passwordsMatch = password === confirmPassword;
   const showError = !passwordsMatch && touched;
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(import.meta.env.VITE_BACKEND_API_URL + "/api/auth/signup", {
+        name,
+        email,
+        password,
+      }, {withCredentials: true});
+      console.log(response.data);
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div
@@ -55,6 +77,7 @@ const SignUp = () => {
                 borderWidth: "1.5px",
                 color: textColor,
               }}
+              onChange = {(e) => setName(e.target.value)}
               onFocus={(e) =>
                 (e.target.style.boxShadow = `0 0 0 3px rgba(85, 230, 193, 0.1)`)
               }
@@ -81,6 +104,7 @@ const SignUp = () => {
                 borderWidth: "1.5px",
                 color: textColor,
               }}
+              onChange = {(e) => setEmail(e.target.value)}
               onFocus={(e) =>
                 (e.target.style.boxShadow = `0 0 0 3px rgba(85, 230, 193, 0.1)`)
               }
@@ -157,10 +181,12 @@ const SignUp = () => {
           {/* Register Button */}
           <button
             type="button"
-            className="w-full mt-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50"
+            className="w-full mt-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white cursor-pointer font-semibold py-3 px-4 rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50"
+            onClick={handleSubmit}
           >
             Register
           </button>{" "}
+
           <div className="relative flex py-2 items-center">
             <div className="flex-grow border-t border-gray-200"></div>{" "}
             <span className="flex-shrink mx-4 text-gray-400 text-sm">OR</span>
@@ -169,15 +195,18 @@ const SignUp = () => {
           {/* Signup with google button */}
           <button
             type="button"
-            className="w-full mt-1 border-2 border-teal-500 text-gray-700 font-semibold py-3 px-4 rounded-lg hover:bg-teal-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 flex items-center justify-center"
+            className="w-full mt-1 border-2 border-teal-500 text-gray-700 font-semibold cursor-pointer py-3 px-4 rounded-lg hover:bg-teal-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 flex items-center justify-center"
           >
             <FcGoogle className="inline mr-2 text-2xl bg-white rounded-full" />
             Sign up with Google
           </button>
           <button>
-            <p className="text-sm mt-4 text-center text-gray-600">
+            <p className="text-sm mt-4 text-center text-gray-600"
+              onClick={(e) => navigate("/login", { replace: true })} >
               Already have an account?{" "}
-              <span className="text-teal-500 font-semibold hover:underline cursor-pointer">
+              <span
+                className="text-teal-500 font-semibold hover:underline cursor-pointer"
+              >
                 Log In
               </span>
             </p>

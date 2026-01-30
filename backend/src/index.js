@@ -10,9 +10,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // middleware to enable CORS
-app.use(cors(
-  
-));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 // middleware to parse JSON request bodies
 app.use(express.json());
 // cookie parser middleware
@@ -20,8 +23,6 @@ app.use(cookieParser());
 
 // use auth routes
 app.use("/api/auth", authRouter);
-
-
 
 // start the server on the specified port
 app.listen(PORT, () => {
