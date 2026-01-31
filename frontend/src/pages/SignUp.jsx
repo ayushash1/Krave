@@ -28,11 +28,15 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(import.meta.env.VITE_BACKEND_API_URL + "/api/auth/signup", {
-        name,
-        email,
-        password,
-      }, {withCredentials: true});
+      const response = await axios.post(
+        import.meta.env.VITE_BACKEND_API_URL + "/api/auth/signup",
+        {
+          name,
+          email,
+          password,
+        },
+        { withCredentials: true },
+      );
       console.log(response.data);
       navigate("/login");
     } catch (error) {
@@ -77,7 +81,7 @@ const SignUp = () => {
                 borderWidth: "1.5px",
                 color: textColor,
               }}
-              onChange = {(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               onFocus={(e) =>
                 (e.target.style.boxShadow = `0 0 0 3px rgba(85, 230, 193, 0.1)`)
               }
@@ -104,7 +108,7 @@ const SignUp = () => {
                 borderWidth: "1.5px",
                 color: textColor,
               }}
-              onChange = {(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               onFocus={(e) =>
                 (e.target.style.boxShadow = `0 0 0 3px rgba(85, 230, 193, 0.1)`)
               }
@@ -186,7 +190,6 @@ const SignUp = () => {
           >
             Register
           </button>{" "}
-
           <div className="relative flex py-2 items-center">
             <div className="flex-grow border-t border-gray-200"></div>{" "}
             <span className="flex-shrink mx-4 text-gray-400 text-sm">OR</span>
@@ -200,17 +203,17 @@ const SignUp = () => {
             <FcGoogle className="inline mr-2 text-2xl bg-white rounded-full" />
             Sign up with Google
           </button>
-          <button>
-            <p className="text-sm mt-4 text-center text-gray-600"
-              onClick={(e) => navigate("/login", { replace: true })} >
+          <div>
+            <p className="text-sm mt-4 text-center text-gray-600">
               Already have an account?{" "}
               <span
                 className="text-teal-500 font-semibold hover:underline cursor-pointer"
+                onClick={(e) => navigate("/login", { replace: true })}
               >
                 Log In
               </span>
             </p>
-          </button>
+          </div>
         </form>
       </div>
     </div>
