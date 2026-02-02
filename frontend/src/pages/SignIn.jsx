@@ -124,15 +124,15 @@ const SignIn = () => {
           {/* Login Button */}
           <button
             type="button"
-            className="w-full mt-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white cursor-pointer font-semibold py-3 px-4 rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50"
+            className="w-full mt-2 bg-linear-to-r from-teal-500 to-cyan-500 text-white cursor-pointer font-semibold py-3 px-4 rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50"
             onClick={handleSubmit}
           >
             Login
           </button>{" "}
           <div className="relative flex py-2 items-center">
-            <div className="flex-grow border-t border-gray-200"></div>{" "}
-            <span className="flex-shrink mx-4 text-gray-400 text-sm">OR</span>
-            <div className="flex-grow border-t border-gray-200"></div>{" "}
+            <div className="grow border-t border-gray-200"></div>{" "}
+            <span className="shrink mx-4 text-gray-400 text-sm">OR</span>
+            <div className="grow border-t border-gray-200"></div>{" "}
           </div>
           {/* Login with google button */}
           <button
