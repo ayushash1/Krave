@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 
 const ForgotPassword = () => {
@@ -9,7 +10,7 @@ const ForgotPassword = () => {
   const textColor = "#2C3E50";
   const accentColor = "#FF6B6B";
   const lightBg = "#F0F8F5";
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
 
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -22,6 +23,55 @@ const ForgotPassword = () => {
   const showError = !passwordsMatch && touched;
 
   const navigate = useNavigate();
+
+  const handleSendOtp = async () => {
+    try {
+      const response = await axios.post(
+        import.meta.env.VITE_BACKEND_API_URL + "/api/auth/send-otp",
+        { email },
+        { withCredentials: true },
+      );
+      if (response.status === 200) {
+        setStep(2);
+      }
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    try {
+      const response = await axios.post(
+        import.meta.env.VITE_BACKEND_API_URL + "/api/auth/verify-otp",
+        { email, otp: parseInt(otp) },
+        { withCredentials: true },
+      );
+      if (response.status === 200) {
+        setStep(3);
+      }
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (password !== confirmPassword) {
+      setTouched(true);
+      return;
+    }
+    try {
+      const response = await axios.post(
+        import.meta.env.VITE_BACKEND_API_URL + "/api/auth/reset-password",
+        { email, password },
+        { withCredentials: true },
+      );
+      if (response.status === 200) {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Error resetting password:", error);
+    }
+  };
   return (
     <div
       className="flex min-h-screen items-center justify-center"
@@ -59,7 +109,10 @@ const ForgotPassword = () => {
               <div className="grow border-t border-gray-200"></div>
             </div>
 
-            <button className="w-full mt-4 border-2 border-teal-500 text-gray-700 font-semibold cursor-pointer py-3 px-4 rounded-lg hover:bg-teal-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 flex items-center justify-center">
+            <button
+              onClick={handleSendOtp}
+              className="w-full mt-4 border-2 border-teal-500 text-gray-700 font-semibold cursor-pointer py-3 px-4 rounded-lg hover:bg-teal-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 flex items-center justify-center"
+            >
               Send Reset Link
             </button>
             <div>
@@ -98,7 +151,10 @@ const ForgotPassword = () => {
               <div className="grow border-t border-gray-200"></div>
             </div>
 
-            <button className="w-full mt-4 border-2 border-teal-500 text-gray-700 font-semibold cursor-pointer py-3 px-4 rounded-lg hover:bg-teal-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 flex items-center justify-center">
+            <button
+              onClick={handleVerifyOtp}
+              className="w-full mt-4 border-2 border-teal-500 text-gray-700 font-semibold cursor-pointer py-3 px-4 rounded-lg hover:bg-teal-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 flex items-center justify-center"
+            >
               Verify OTP
             </button>
           </div>
@@ -152,7 +208,10 @@ const ForgotPassword = () => {
               <div className="grow border-t border-gray-200"></div>
             </div>
 
-            <button className="w-full mt-4 border-2 border-teal-500 text-gray-700 font-semibold cursor-pointer py-3 px-4 rounded-lg hover:bg-teal-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 flex items-center justify-center">
+            <button
+              onClick={handleResetPassword}
+              className="w-full mt-4 border-2 border-teal-500 text-gray-700 font-semibold cursor-pointer py-3 px-4 rounded-lg hover:bg-teal-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-opacity-50 flex items-center justify-center"
+            >
               Reset Password
             </button>
           </div>
