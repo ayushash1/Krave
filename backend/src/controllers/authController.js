@@ -121,7 +121,7 @@ export const sendOtp = async (req, res) => {
       return res.status(400).json({ message: "User does not exist" });
     }
 
-    const otp = Math.floor(1000 + Math.random() * 9000);
+    const otp = String(Math.floor(1000 + Math.random() * 9000));
 
     user.resetOtp = otp;
     user.resetOtpExpiry = Date.now() + 10 * 60 * 1000;
@@ -150,7 +150,7 @@ export const verifyOtp = async (req, res) => {
     if (user.resetOtpExpiry < Date.now()) {
       return res.status(400).json({ message: "OTP expired" });
     }
-    if (user.resetOtp !== otp) {
+    if (user.resetOtp !== String(otp)) {
       return res.status(400).json({ message: "Invalid OTP" });
     }
     user.isOtpVerified = true;

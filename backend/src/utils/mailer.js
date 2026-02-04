@@ -1,5 +1,5 @@
-import nodemailer from 'nodemailer';
-import passwordResetOtpTemplate from './emailTemplates/passwordResetHtml';
+import nodemailer from "nodemailer";
+import passwordResetOtpTemplate from "./emailTemplates/passwordResetHtml.js";
 
 const transporter = nodemailer.createTransport({
   service: "gmail", // Shortcut for Gmail's SMTP settings - see Well-Known Services
@@ -10,10 +10,9 @@ const transporter = nodemailer.createTransport({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
   },
-  logger :true,
-  debug: true
+  logger: true,
+  debug: true,
 });
-
 
 export const sendOtpMail = async (email, otp) => {
   try {
@@ -22,10 +21,9 @@ export const sendOtpMail = async (email, otp) => {
       to: email,
       subject: "Krave | Password Reset OTP",
       text: `Your OTP is ${otp}`,
-      html: passwordResetOtpTemplate(otp)
+      html: passwordResetOtpTemplate(otp),
     });
   } catch (error) {
     console.error("Error in sending OTP mail:", error);
   }
-}
-    
+};
